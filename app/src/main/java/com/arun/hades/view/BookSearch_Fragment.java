@@ -12,19 +12,23 @@ import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.arun.hades.viewmodel.BookSearchViewModel;
+import com.bumptech.glide.Glide;
+
+
 import com.arun.hades.R;
 
 public  class BookSearch_Fragment extends Fragment {
 
 
-    private BookSearchModel mViewModel;
+    private BookSearchViewModel mViewModel;
     private ViewDataBinding binding;
 public BookSearch_Fragment(){}
     public static BookSearch_Fragment newInstance() { return new BookSearch_Fragment(); }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        mViewModel = new ViewModelProvider(this).get(BookSearchModel.class);
+        mViewModel = new ViewModelProvider(this).get(BookSearchViewModel.class);
         super.onCreate(savedInstanceState);
 
 

@@ -12,11 +12,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.arun.hades.R;
 import com.arun.hades.model.Volume;
+import com.arun.hades.util.Util;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.internal.Util;
 
 
 public class BookSearchResultsAdapter extends RecyclerView.Adapter<com.arun.hades.adapter.BookSearchResultsAdapter.BookSearchResultHolder> {
