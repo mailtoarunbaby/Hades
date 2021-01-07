@@ -4,42 +4,34 @@ package com.arun.hades.viewmodel;
 import androidx.databinding.Bindable;
 import androidx.databinding.Observable;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import com.arun.hades.repository.BookRepository;
+import com.arun.hades.response.VolumesResponse;
 
 import org.jetbrains.annotations.NotNull;
 
 
-public class BookSearchViewModel extends ViewModel implements Observable {
-    @Bindable
-    @NotNull
-    public MutableLiveData<String> bookName;
-    @Bindable
-    @NotNull
-    public   MutableLiveData<String> authorName;
+public class BookSearchViewModel extends ViewModel {
+    private BookRepository bookRepository;
+    private LiveData<VolumesResponse> volumesResponseLiveData;
 
-    @Bindable
-    @NotNull
-    public   MutableLiveData<String> searchButtonText;
+//    public BookSearchViewModel(@NonNull Application application) {
+//        super(application);
+//    }
 
-    @Override
-    public void addOnPropertyChangedCallback(OnPropertyChangedCallback callback) {
-
+    public void init() {
+        bookRepository = new BookRepository();
+        volumesResponseLiveData = bookRepository.getVolumesResponseLiveData();
     }
 
-    @Override
-    public void removeOnPropertyChangedCallback(OnPropertyChangedCallback callback) {
-
+    public void searchVolumes(String keyword, String author) {
+        bookRepository.searchVolumes(keyword, author);
     }
-    public BookSearchViewModel(){
-        this.searchButtonText=new  MutableLiveData<>();
 
-        this.searchButtonText.setValue("Search");
-    }
-    // TODO: Implement the ViewModel
-
-    public final void  doSearch(){
-        System.out.println("#######################################" );
-
+    public LiveData<VolumesResponse> getVolumesResponseLiveData() {
+        return volumesResponseLiveData;
     }
 }

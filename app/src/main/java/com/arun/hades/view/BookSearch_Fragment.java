@@ -4,48 +4,80 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.arun.hades.adapter.BookSearchResultsAdapter;
+import com.arun.hades.response.VolumesResponse;
 import com.arun.hades.viewmodel.BookSearchViewModel;
 import com.bumptech.glide.Glide;
 
 
 import com.arun.hades.R;
+import com.google.android.material.textfield.TextInputEditText;
 
 public  class BookSearch_Fragment extends Fragment {
 
 
-    private BookSearchViewModel mViewModel;
-    private ViewDataBinding binding;
-public BookSearch_Fragment(){}
-    public static BookSearch_Fragment newInstance() { return new BookSearch_Fragment(); }
+    private BookSearchViewModel viewModel;
+    private BookSearchResultsAdapter adapter;
+
+    private TextInputEditText keywordEditText, authorEditText;
+    private Button searchButton;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        mViewModel = new ViewModelProvider(this).get(BookSearchViewModel.class);
         super.onCreate(savedInstanceState);
 
+        adapter = new BookSearchResultsAdapter();
 
+        viewModel = new ViewModelProvider(this).get(BookSearchViewModel.class);
+        viewModel.init();
+        viewModel.getVolumesResponseLiveData().observe(this, new Observer<VolumesResponse>() {
+            @Override
+            public void onChanged(VolumesResponse volumesResponse) {
+                if (volumesResponse != null) {
+                    adapter.setResults(volumesResponse.getItems());
+                }
+            }
+        });
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-         super.onCreateView(inflater, container, savedInstanceState);
-         binding = DataBindingUtil.inflate(inflater, R.layout.booksearch__fragment, container, false);
-        return binding.getRoot();
+        View view = inflater.inflate(R.layout.booksearch__fragment, container, false);
+
+        RecyclerView recyclerView = view.findViewById(R.id.fragment_booksearch_searchResultsRecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(adapter);
+
+        keywordEditText = view.findViewById(R.id.fragment_booksearch_keyword);
+        authorEditText = view.findViewById(R.id.fragment_booksearch_author);
+        searchButton = view.findViewById(R.id.fragment_booksearch_search);
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                performSearch();
+            }
+        });
+
+        return view;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-
+    public void performSearch() {
+        String keyword = keywordEditText.getEditableText().toString();
+        String author = authorEditText.getEditableText().toString();
+        viewModel.searchVolumes(keyword, author);
     }
 }

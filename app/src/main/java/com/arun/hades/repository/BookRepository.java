@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 
 
 import com.arun.hades.api.BookSearchService;
+import com.arun.hades.constants.ApiUrlConstant;
 import com.arun.hades.response.VolumesResponse;
 
 import okhttp3.OkHttpClient;
@@ -28,7 +29,7 @@ public class BookRepository {
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
         bookSearchService = new retrofit2.Retrofit.Builder()
-                .baseUrl(BOOK_SEARCH_SERVICE_BASE_URL)
+                .baseUrl(ApiUrlConstant.BOOK_SEARCH_BASE_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
