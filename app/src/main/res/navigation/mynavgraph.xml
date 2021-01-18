@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mynavgraph"
+    app:startDestination="@id/bookSearchFragment">
+    <fragment android:name="com.arun.hades.view.BookSearch_Fragment"
+        android:id="@+id/bookSearchFragment"
+        android:label="book_search"
+        tools:layout="@layout/booksearch__fragment"/>
+
+</navigation>
